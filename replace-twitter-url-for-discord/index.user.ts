@@ -36,7 +36,7 @@ Tampermonkey > Discord用URLをコピーとクリックすると、
 // ==UserScript==
 // @name            Discord用URLをコピー
 // @namespace       https://twitter.com/mai_shirayama
-// @version         0.1.2
+// @version         0.1.3
 // @description     Copy the URL with the domain replaced by "vxtwitter.com" to the clipboard.
 // @author          @mai_shirayama
 // @match           https://x.com/*status*

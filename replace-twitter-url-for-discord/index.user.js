@@ -36,7 +36,7 @@ Tampermonkey > Discord用URLをコピーとクリックすると、
 // ==UserScript==
 // @name            Discord用URLをコピー
 // @namespace       https://twitter.com/mai_shirayama
-// @version         1.0.0
+// @version         1.0.1
 // @description     Copy the URL with the domain replaced by "vxtwitter.com" to the clipboard.
 // @icon            https://github.com/shirayama-mai/user-scripts/raw/main/replace-twitter-url-for-discord/icon.png
 // @author          @mai_shirayama
@@ -55,8 +55,8 @@ Tampermonkey > Discord用URLをコピーとクリックすると、
     const url = window.location.href;
     const relativePath = removeOrigin(url);
     const fixedUrl = fixURL(relativePath, BASE_URL);
-    GM_registerMenuCommand('Discord用URLをコピー', onClickContextmenu(fixedUrl));
-    document.addEventListener('keydown', onKeydownListener(fixedUrl));
+    GM_registerMenuCommand('Discord用URLをコピー', onClickContextmenu);
+    document.addEventListener('keydown', onKeydownListener);
 })();
 /**
  * 与えられた文字列をクリップボードへコピーする関数
@@ -78,26 +78,34 @@ function fixURL(relativePath, baseUrl) {
     const fixedUrl = new URL(relativePath, baseUrl);
     return fixedUrl.href;
 }
+function getFixedURL() {
+    const BASE_URL = 'https://vxtwitter.com/';
+    const url = window.location.href;
+    if (!/\/status\//.test(url)) {
+        return undefined;
+    }
+    const relativePath = removeOrigin(url);
+    const fixedUrl = fixURL(relativePath, BASE_URL);
+    return fixedUrl;
+}
 /**
  * コンテキストメニューがクリックのリスナー
  */
-function onClickContextmenu(text) {
-    const listener = () => {
-        copy2Clipboard(text);
-    };
-    return listener;
+function onClickContextmenu() {
+    const fixedUrl = getFixedURL();
+    if (fixedUrl) {
+        copy2Clipboard(fixedUrl);
+    }
 }
 /**
  * タブ内のホットキーを定義するリスナー
  */
-function onKeydownListener(text) {
-    const listener = (ev) => {
-        if (ev.ctrlKey && ev.altKey && ev.key === 'c') {
-            ev.preventDefault();
-            copy2Clipboard(text);
-        }
-    };
-    return listener;
+function onKeydownListener(ev) {
+    const fixedUrl = getFixedURL();
+    if (fixedUrl && ev.ctrlKey && ev.altKey && ev.key === 'c') {
+        ev.preventDefault();
+        copy2Clipboard(fixedUrl);
+    }
 }
 /**
  * 与えられたurlの相対パスを返す関数

@@ -39,8 +39,8 @@ Tampermonkey > Discord用URLをコピーとクリックすると、
 // @version         0.1.2
 // @description     Copy the URL with the domain replaced by "vxtwitter.com" to the clipboard.
 // @author          @mai_shirayama
-// @match           https://x.com/*/status/*
-// @match           https://twitter.com/*/status/*
+// @match           https://x.com/*status*
+// @match           https://twitter.com/*status*
 // @grant           GM_setClipboard
 // @grant           GM_registerMenuCommand
 // @run-at          document-idle

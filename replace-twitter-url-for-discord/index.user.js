@@ -7,10 +7,7 @@
 // @author          @mai_shirayama
 // @match           https://*/*
 // @run-at          document-idle
-// @updateUrl       https://github.com/shirayama-mai/user-scripts/raw/main/replace-twitter-url-for-discord/index.user.js
+// @updateURL       https://github.com/shirayama-mai/user-scripts/raw/main/replace-twitter-url-for-discord/index.user.js
+// @downloadURL     https://stackoverflow.com/questions/49392803/tampermonkey-script-not-auto-updating
 // @noframes
 // ==/UserScript==
-(() => {
-    'use stricts';
-    console.log('hello world!');
-})();

@@ -1,0 +1,16 @@
+{
+  "name": "user-scripts",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "shirayama-mai <mai.shirayama@gmail.com> (https://twitter.com/mai_shirayama)",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/tampermonkey": "^5.0.2",
+    "typescript": "^5.3.3"
+  }
+}

@@ -19,11 +19,11 @@
 ## 使い方
 
 ### ショートカットキー
-Twitterのページを開いた状態で[Ctrl] + [Alt] + [C]を同時押しすると、
+Twitterで誰かのツイートを開いた状態で[Ctrl] + [Alt] + [C]を同時押しすると、
 クリップボードにはvxtwitter.comに変換されたURLがコピーされます。
 
 ### 右クリックメニュー
-Twitterのページ上で右クリックをして、
+Twitterで誰かのツイートを開いた状態でページ上を右クリックをして、
 Tampermonkey > Discord用URLをコピーとクリックすると、
 クリップボードにはvxtwitter.comに変換されたURLがコピーされます。
 
@@ -36,11 +36,11 @@ Tampermonkey > Discord用URLをコピーとクリックすると、
 // ==UserScript==
 // @name            Discord用URLをコピー
 // @namespace       https://twitter.com/mai_shirayama
-// @version         0.1.1
+// @version         0.1.2
 // @description     Copy the URL with the domain replaced by "vxtwitter.com" to the clipboard.
 // @author          @mai_shirayama
-// @match           https://x.com/*
-// @match           https://twitter.com/*
+// @match           https://x.com/*/status/*
+// @match           https://twitter.com/*/status/*
 // @grant           GM_setClipboard
 // @grant           GM_registerMenuCommand
 // @run-at          document-idle

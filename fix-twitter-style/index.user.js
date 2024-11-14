@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Fix Twitter Style;
+// @name         Fix Twitter Style
 // @namespace    https://www.shiraya.ma/
-// @version      2024-11-14
+// @version      2024-11-15
 // @updateURL    https://github.com/shiraya-ma/user-scripts/raw/refs/heads/main/fix-twitter-style/index.user.js
 // @description  Fix style for little css bugs.
 // @author       https://x.com/shiraya_ma

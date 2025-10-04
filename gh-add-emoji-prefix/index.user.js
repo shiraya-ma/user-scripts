@@ -48,7 +48,7 @@
  */
 function onOpenMergePullRequestModal (callback) {
   /**
-   * 
+   * Checks if the emoji prefix has already been added to the input.
    * @param {HTMLInputElement} input 
    * @returns {boolean}
    */

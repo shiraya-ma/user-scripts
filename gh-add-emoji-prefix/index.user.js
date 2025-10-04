@@ -11,16 +11,19 @@
 
 (() => {
   'use strict';
+  const EMOJI_PREFIX_REGEX = /^:\w+:\s/;
 
   onOpenCommitSuggestionModal((input) => {
     console.log('commit suggestion input found:', input);
     const originalValue = input.value;
 
-    if (/^:\w+:\s/.test(originalValue)) {
+    const SUGGESTION_PREFIX = ':recycle:';
+
+    if (EMOJI_PREFIX_REGEX.test(originalValue)) {
       return;
     }
     
-    input.value = `:recycle: ${originalValue}`;
+    input.value = `${SUGGESTION_PREFIX} ${originalValue}`;
     console.log('updated commit suggestion message:', input.value);
   });
 
@@ -28,12 +31,13 @@
     console.log('merge pull request input found:', input);
     const originalValue = input.value;
 
-    if (/^:\w+:\s/.test(originalValue)) {
+    const MERGE_EMOJI_PREFIX = ':twisted_rightwards_arrows:';
+
+    if (EMOJI_PREFIX_REGEX.test(originalValue)) {
       return;
     }
 
-    input.value = `:twisted_rightwards_arrows: ${originalValue}`;
-
+    input.value = `${MERGE_EMOJI_PREFIX} ${originalValue}`;
     console.log('updated merge message:', input.value);
   });
 })();

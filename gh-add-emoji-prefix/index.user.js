@@ -4,7 +4,7 @@
 // @version      1.0.0-alpha
 // @description  try to take over the world!
 // @author       @shiraya-ma
-// @match        https://github.com/shiraya-ma/xmlrpc-json/pull/6
+// @match        https://github.com/*/*/pull/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=github.com
 // @grant        none
 // ==/UserScript==

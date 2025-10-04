@@ -42,21 +42,31 @@
  * @param {OnOpenCallback} callback 
  */
 function onOpenMergePullRequestModal (callback) {
-  let shown = false;
+  /**
+   * 
+   * @param {HTMLInputElement} input 
+   * @returns {boolean}
+   */
+  const isShown = (input) => input.getAttribute('gh-add-emoji-prefix-shown') === 'true';
+
+  /**
+   * 
+   * @param {HTMLInputElement} input 
+   * @param {boolean} shown 
+   */
+  const toggleShown = (input, shown) => {
+    input.setAttribute('gh-add-emoji-prefix-shown', shown ? 'true' : 'false');
+  };
 
   const observer = new MutationObserver(() => {
     /** @type { HTMLInputElement | null } */
     const input = document.querySelector('div.merge-pr input');
 
-    if (!input) {
-      shown = false;
-      return;
-    }
+    if (!input || isShown(input)) return;
 
-    if (!shown) {
-      shown = true;
-      callback(input);
-    }
+    toggleShown(input, true);
+
+    callback(input);
   });
 
   observer.observe(document.body, { childList: true, subtree: true });

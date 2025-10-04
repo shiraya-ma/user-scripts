@@ -33,7 +33,7 @@ function onOpenMergePullRequestModal (callback) {
   let shown = false;
 
   const observer = new MutationObserver(() => {
-    /** @type { HTMLInputELement | null } */
+    /** @type { HTMLInputElement | null } */
     const input = document.querySelector('div.merge-pr input');
 
     if (!input) {

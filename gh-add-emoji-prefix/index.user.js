@@ -78,7 +78,7 @@ function onOpenMergePullRequestModal (callback) {
 };
 
 /**
- * 
+ * Observes for the GitHub commit suggestion modal and executes a callback when it appears.
  * @param {OnOpenCallback} callback 
  */
 function onOpenCommitSuggestionModal (callback) {

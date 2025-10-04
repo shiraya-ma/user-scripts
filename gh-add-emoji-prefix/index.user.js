@@ -26,7 +26,7 @@
 })();
 
 /**
- * 
+ * Observes for the GitHub merge modal and executes a callback when it appears.
  * @param {OnOpenCallback} callback 
  */
 function onOpenMergePullRequestModal (callback) {

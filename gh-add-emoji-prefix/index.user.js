@@ -12,6 +12,18 @@
 (() => {
   'use strict';
 
+  onOpenCommitSuggestionModal((input) => {
+    console.log('commit suggestion input found:', input);
+    const originalValue = input.value;
+
+    if (/^:\w+:\s/.test(originalValue)) {
+      return;
+    }
+    
+    input.value = `:recycle: ${originalValue}`;
+    console.log('updated commit suggestion message:', input.value);
+  });
+
   onOpenMergePullRequestModal((input) => {
     const originalValue = input.value;
 
@@ -48,6 +60,44 @@ function onOpenMergePullRequestModal (callback) {
   });
 
   observer.observe(document.body, { childList: true, subtree: true });
+};
+
+/**
+ * 
+ * @param {OnOpenCallback} callback 
+ */
+function onOpenCommitSuggestionModal (callback) {
+  /**
+   * @param {HTMLElement} details 
+   * @returns {boolean}
+   */
+  const isOpen = (details) => details.hasAttribute('open');
+
+  const detailsListObserver = new MutationObserver(() => {
+    /** @type { NodeListOf<HTMLElement> } */
+    const details = document.querySelectorAll('details.js-apply-single-suggestion');
+
+    if (details.length > 0) {
+      console.log('details found, disconnecting observer');
+      detailsListObserver.disconnect();
+    }
+
+    details.forEach((details) => {
+      const detailsObserver = new MutationObserver(() => {
+        if (!isOpen(details)) return;
+
+        const input = details.querySelector('form.js-single-suggested-change-form input[name="commit_title"]');
+
+        if (!input) return;
+
+        callback(input);
+      });
+
+      detailsObserver.observe(details, { attributes: true, attributeFilter: ['open'] });
+    });
+  });
+
+  detailsListObserver.observe(document.body, { childList: true, subtree: true });
 };
 
 /**

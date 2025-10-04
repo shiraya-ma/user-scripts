@@ -25,6 +25,7 @@
   });
 
   onOpenMergePullRequestModal((input) => {
+    console.log('merge pull request input found:', input);
     const originalValue = input.value;
 
     if (/^:\w+:\s/.test(originalValue)) {

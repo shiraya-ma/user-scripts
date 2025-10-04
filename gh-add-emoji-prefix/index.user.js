@@ -2,7 +2,7 @@
 // @name         Add Emoji Prefix on PR
 // @namespace    http://tampermonkey.net/
 // @version      1.0.0-alpha
-// @description  try to take over the world!
+// @description  Adds an emoji prefix to the merge commit message on GitHub pull requests.
 // @author       @shiraya-ma
 // @match        https://github.com/*/*/pull/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=github.com

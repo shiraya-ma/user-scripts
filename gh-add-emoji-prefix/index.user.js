@@ -88,16 +88,29 @@ function onOpenCommitSuggestionModal (callback) {
    */
   const isOpen = (details) => details.hasAttribute('open');
 
+  /**
+   * @param {HTMLElement} details 
+   * @returns {boolean}
+   */
+  const isObserved = (details) => details.getAttribute('gh-add-emoji-prefix-observed') === 'true';
+
+  /**
+   * @param {HTMLElement} details 
+   * @param {true} observed 
+   */
+  const toggleObserved = (details, observed) => {
+    details.setAttribute('gh-add-emoji-prefix-observed', observed ? 'true' : 'false');
+  }
+
   const detailsListObserver = new MutationObserver(() => {
     /** @type { NodeListOf<HTMLElement> } */
     const details = document.querySelectorAll('details.js-apply-single-suggestion');
 
-    if (details.length > 0) {
-      console.log('details found, disconnecting observer');
-      detailsListObserver.disconnect();
-    }
+    details
+    .filter((details) => !isObserved(details))
+    .forEach((details) => {
+      toggleObserved(details, true);
 
-    details.forEach((details) => {
       const detailsObserver = new MutationObserver(() => {
         if (!isOpen(details)) return;
 

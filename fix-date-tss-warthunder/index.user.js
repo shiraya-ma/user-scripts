@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name         Fix date to Locale Date Format on TSS WAR THUNDER
 // @namespace    http://tampermonkey.net/
-// @version      v0.0.1
+// @version      v0.0.2
 // @updateURL    https://github.com/shiraya-ma/user-scripts/raw/refs/heads/main/fix-date-tss-warthunder/index.user.js
+// @downloadURL  https://github.com/shiraya-ma/user-scripts/raw/refs/heads/main/fix-date-tss-warthunder/index.user.js
 // @description  try to take over the world!
 // @author       You
 // @match        https://tss.warthunder.com/index.php

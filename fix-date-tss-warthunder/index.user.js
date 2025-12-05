@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Fix date to Locale Date Format on TSS WAR THUNDER
 // @namespace    http://tampermonkey.net/
-// @version      v0.0.2
+// @version      v0.1.0
 // @updateURL    https://github.com/shiraya-ma/user-scripts/raw/refs/heads/main/fix-date-tss-warthunder/index.user.js
 // @downloadURL  https://github.com/shiraya-ma/user-scripts/raw/refs/heads/main/fix-date-tss-warthunder/index.user.js
 // @description  try to take over the world!
@@ -23,6 +23,11 @@
       return;
     }
     case 'tournament': {
+      actionTournament();
+      return;
+    }
+    case 'my_tournaments': {
+      actionMyTournaments();
       return;
     }
     default: {
@@ -43,83 +48,120 @@ function getAction () {
   return action;
 };
 
+// ##############################
+// current_tournaments
+// ##############################
+
 /**
- * @typedef { 'current_tournaments' | 'tournament'} Action
+ * @typedef { 'current_tournaments' | 'tournament' | 'my_tournaments' } Action
  */
 
 function actionCurrentTournaments () {
-  waitRenderContentCardTournament((container) => {
-    console.log('found container:', container);
+  observeOnce('div#contentCardTournament', (container) => {
+    // Tournament Date
+    observesOnce('div[card-name="tornamentStatus"]', (card) => {
+      observeOnce('p[data-original-title="Tournament Date"]', fixDuration, card);
+    }, container);    
+  });
+};
 
-    waitRenderTournamentDate(container, (card => {
-      console.debug(card);
+// ##############################
+// tournament
+// ##############################
 
-      const tournamentDate = card.querySelector('p[data-original-title="Tournament Date"]');
-      console.debug('tournamentDate:', tournamentDate);
-      const [ initStartDate, initEndDate ] = tournamentDate.textContent.split(/\s-\s/);
-      console.debug('initStartDate:', initStartDate, ', initEndDate:', initEndDate);
+function actionTournament () {
+  observeOnce('div#time_tournament_about', (about) => {
+    // Registration ending and tournament bracket generation
+    observeOnce('div#time_tournament_about', fixDate, about);
 
-      const startDate = new Date(initStartDate);
-      const endDate = new Date(initEndDate);
+    // Play-off
+    observesOnce('div[name="tournament_time_all"]', (round) => {
+      observeOnce('div[name="time_tour"]', fixDate, round);
+    }, about);
+  });
+};
 
-      tournamentDate.textContent = `${fixDateFormat(startDate)} - ${fixDateFormat(endDate)}`
-      console.debug('startDate:', startDate, ', endDate:', endDate);
-    }));
+// ##############################
+// my_tournaments
+// ##############################
+
+function actionMyTournaments () {
+  observeOnce('div#contentCardMyTournament', (contentCardMyTournament) => {
+    observesOnce('div[card-name="tornamentStatus"] > div.row', (tornamentStatus) => {
+      observeOnce('p[card-name="dayTournament"]', fixDuration, tornamentStatus);
+    } ,contentCardMyTournament);
   });
 };
 
 /**
- *
- * @param { (container: HTMLDivElement) => void } callback
+ * 
+ * @param {string} selector 
+ * @param {(target: HTMLElement) => void} callback 
+ * @param { HTMLElement | undefined } container 
  */
-async function waitRenderContentCardTournament (callback) {
-  const selector = 'div#contentCardTournament';
+function observeOnce (selector, callback, container) {
+  const _container = container ?? document.body;
 
-  const container = document.querySelector(selector);
-  if (container) {
-    callback(container);
+  console.group(selector);
+
+  console.debug('seach...');
+
+  const target = _container.querySelector(selector);
+  if (target) {
+    console.debug('sync find:', target);
+    callback(target);
+    console.groupEnd();
     return;
   }
 
   const observer = new MutationObserver(() => {
-    const container = document.querySelector(selector);
-    console.log('search container:', container);
-    if (!container) return;
+    const target = _container.querySelector(selector);
+    if (!target) return;
 
+    console.debug('async find:', target);
     observer.disconnect();
-    callback(container);
+    callback(target);
+    console.groupEnd();
   });
 
-  observer.observe(document.body, {
+  observer.observe(_container, {
     childList: true,
     subtree: true,
   });
 };
 
 /**
- *
- * @param { HTMLDivElement } container
- * @param { (card: HTMLDivElement) => void } callback
+ * 
+ * @param {string} selector 
+ * @param {(target: HTMLElement) => void} callback 
+ * @param { HTMLElement | undefined } container 
  */
-async function waitRenderTournamentDate (container, callback) {
-  const selector = 'div[card-name="tornamentStatus"]';
+function observesOnce (selector, callback, container) {
+  const _container = container ?? document.body;
 
-  const cards = container.querySelectorAll(selector);
-  if (cards.length > 0) {
-    cards.forEach(callback);
+  console.group(selector);
+
+  console.debug('seach...');
+
+  const targets = _container.querySelectorAll(selector);
+  if (targets.length) {
+    console.debug('sync find:', targets);
+    targets.forEach(callback);
+    console.groupEnd();
     return;
   }
 
   const observer = new MutationObserver(() => {
-    const cards = container.querySelectorAll(selector);
-    console.log('search cards:', cards);
-    if (!cards || cards.length < 1) return;
+    const targets = _container.querySelectorAll(selector);
+    if (!targets.length) return;
 
+    console.debug('async find:', targets);
     observer.disconnect();
-    cards.forEach(callback);
+    targets.forEach(callback);
+    console.groupEnd();
   });
 
-  observer.observe(container, {
+  observer.observe(_container, {
     childList: true,
     subtree: true,
   });
@@ -139,3 +181,21 @@ function fixDateFormat (date) {
 
   return `${yyyy}/${mm}/${dd} ${H}:${MM}`;
 }
+
+/**
+ * 
+ * @param { HTMLElement } element 
+ */
+function fixDate (element) {
+  const init = new Date(element.textContent);
+  element.textContent = String(fixDateFormat(init));
+};
+
+/**
+ * 
+ * @param { HTMLElement } element 
+ */
+function fixDuration (element) {
+  const [ initStartDate, initEndDate ] = element.textContent.split(/\s-\s/).map(text => new Date(text));
+  element.textContent = `${fixDateFormat(initStartDate)} - ${fixDateFormat(initEndDate)}`;
+};
